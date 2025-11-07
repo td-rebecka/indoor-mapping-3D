@@ -1,0 +1,329 @@
+@font-face {
+  font-family: "NotoSansLocal", sans-serif;
+  src: url("./fonts/NotoSans-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+:root {
+  color-scheme: light;
+  font-family: "NotoSansLocal", sans-serif;
+  background-color: #f5f5f5;
+  color: #222;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================================================
+   GRUNDLAYOUT
+========================================================= */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden !important;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overscroll-behavior: none;
+  touch-action: none;
+  background: #f5f5f5;
+}
+
+canvas {
+  font-family: "NotoSansLocal", sans-serif !important;
+}
+
+.app-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  -webkit-overflow-scrolling: none;
+  touch-action: none;
+}
+
+.map-container,
+.maplibregl-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.map-container {
+  pointer-events: auto !important;
+  z-index: 1;
+}
+
+.map-container > canvas,
+.deckgl-overlay,
+.maplibregl-canvas {
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+
+/* =========================================================
+   LAGERPANEL (TOPP)
+========================================================= */
+.layer-controls {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 99999;
+  pointer-events: auto;
+}
+
+.layer-controls,
+.layer-controls * {
+  pointer-events: auto !important;
+  z-index: 999999 !important;
+}
+
+/* Panelhuvud */
+.layer-header {
+  background: rgba(255, 255, 255, 0.97);
+  padding: 12px 18px;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.layer-header .arrow {
+  font-size: 15px;
+  opacity: 0.6;
+}
+
+/* Panelinnehåll */
+.layer-body {
+  background: rgba(255, 255, 255, 0.98);
+  padding: 12px 18px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  animation: fadeIn 0.25s ease;
+}
+
+/* Gruppstruktur */
+.layer-group {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 6px;
+  margin-bottom: 6px;
+}
+
+.layer-group:last-child {
+  border-bottom: none;
+}
+
+/* Gruppetiketter */
+.group-label {
+  font-weight: 600;
+  color: #222;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 0 2px;
+}
+
+/* --- Indragna underlager med trästruktur / panelkänsla --- */
+.group-layers {
+  background: linear-gradient(135deg, #f7f4f0 0%, #f0ece7 100%);
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin: 6px 0 6px 12px;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6),
+    inset 0 -1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Gör underlagrens etiketter tydligare och indragna */
+.group-layers label {
+  margin-left: 4px;
+  padding-left: 4px;
+  font-size: 14px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.15s;
+}
+
+.group-layers label:hover {
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 4px;
+}
+
+/* Checkboxar – modernt utseende */
+.layer-body label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  gap: 8px;
+  margin: 3px 0;
+  cursor: pointer;
+}
+
+.layer-body input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #888;
+  border-radius: 4px;
+  background: #fff;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.layer-body input[type="checkbox"]:checked {
+  background-color: #1a73e8;
+  border-color: #1a73e8;
+}
+
+.layer-body input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* =========================================================
+   INFOBAR (BOTEN)
+========================================================= */
+.infobar {
+  position: fixed !important;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  padding-bottom: env(safe-area-inset-bottom, 0); /* för iPhone notch */
+  z-index: 999999;
+  touch-action: none;
+  overscroll-behavior: contain;
+  transform: translateZ(0);
+}
+
+.section-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #333;
+  opacity: 0.85;
+  margin-bottom: 4px;
+}
+
+.gps-info,
+.room-info {
+  line-height: 1.4;
+}
+
+/* Knapp för vybyte */
+.view-toggle {
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  background: #e8e8e8;
+  color: #111;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.view-toggle:hover {
+  background: #dcdcdc;
+}
+
+/* =========================================================
+   ANIMATIONER
+========================================================= */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  70% {
+    transform: scale(2);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+.gps-pulse {
+  animation: pulse 2s infinite ease-out;
+}
+
+/* =========================================================
+   MEDIA QUERIES
+========================================================= */
+@media (max-width: 600px) {
+  .infobar {
+    font-size: 14px;
+    padding: 10px 14px 18px;
+    max-height: 40vh;
+  }
+
+  .view-toggle {
+    font-size: 15px;
+    padding: 10px;
+  }
+
+  .layer-header {
+    font-size: 15px;
+    padding: 10px 14px;
+  }
+
+  .layer-body label {
+    font-size: 14px;
+    padding: 6px 8px;
+  }
+}
+
+@media screen and (orientation: landscape) {
+  .infobar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-height: 50vh;
+    font-size: 13px;
+  }
+
+  .room-info {
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    padding-left: 12px;
+    margin-left: 8px;
+  }
+}

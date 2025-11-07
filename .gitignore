@@ -1,0 +1,44 @@
+# --- Node & build ---
+node_modules/
+dist/
+build/
+.tmp/
+temp/
+.cache/
+*.log
+
+# --- Environment & secrets ---
+.env
+.env.local
+.env.*.local
+*.pem
+*.crt
+*.key
+*.pfx
+*.cer
+*.der
+*.csr
+*.enc
+*.secret
+*.config.json
+credentials.json
+
+# --- IDE & OS-filer ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- GitHub Pages output (if manually copied) ---
+gh-pages/
+
+# --- Optional: system / cert utility outputs ---
+certs/
+keys/
+private/
+secrets/
+
+# --- Lock & misc ---
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
